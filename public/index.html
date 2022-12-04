@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea {
+            resize: none;
+            border: none;
+            overflow: auto;
+            outline: none;
+
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+
+        body {
+            background-color: rgb(255, 140, 0);
+        }
+
+        #html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+        }
+
+        #css {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+        }
+
+        #output {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+        }
+
+        .right {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="left">
+        <textarea id="html"></textarea>
+        <textarea id="css"></textarea>
+    </div>
+    <div class="right">
+        <iframe id="output" frameborder="0"></iframe>
+    </div>
+
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+        const socket = io("https://godmoded-sturdy-space-barnacle-w9p6qx46gxq25jpv-3000.preview.app.github.dev/", {
+            transports: ['websocket', 'polling', 'flashsocket']
+        })
+
+        const textareas = document.querySelectorAll("textarea");
+
+        textareas.forEach(textarea => {
+            textarea.addEventListener("keydown", e => {
+                let html = textareas[0].value;
+                let css = textareas[1].value;
+                socket.emit("update", html, css)
+            })
+        })
+
+        socket.on("update", (html, css) => {
+            const iframe = document.querySelector("iframe");
+            if (html) {
+                iframe.contentWindow.document = html;
+            }
+
+            if (css) {
+                iframe.contentWindow.document = 
+            }
+        })
+    </script>
+</body>
+
+</html>
